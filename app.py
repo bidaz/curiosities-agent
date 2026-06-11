@@ -19,12 +19,12 @@ if st.button("Neuen Beitrag erzeugen"):
         post = generate_post()
         os.makedirs("images", exist_ok=True)
 
-image_path = f"images/post_{datetime.now().timestamp()}.png"
+        image_path = f"images/post_{datetime.now().timestamp()}.png"
 
 image_url = generate_image_file(
     post["image_prompt"],
     image_path
-)])
+)
 
         conn.execute(
             """
