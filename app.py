@@ -16,9 +16,11 @@ st.title("🌍 Kurioses aus aller Welt")
 
 if st.button("Neuen Beitrag erzeugen"):
     with st.spinner("Generiere Beitrag und Bild..."):
+
         post = generate_post()
 
         os.makedirs("images", exist_ok=True)
+
         image_path = f"images/post_{datetime.now().timestamp()}.png"
 
         image_url = generate_image_file(
