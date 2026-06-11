@@ -1,7 +1,7 @@
 from datetime import datetime
+import os
 import streamlit as st
 
-import os
 from ai import generate_post, generate_image_file
 from database import get_db
 
@@ -17,14 +17,14 @@ st.title("🌍 Kurioses aus aller Welt")
 if st.button("Neuen Beitrag erzeugen"):
     with st.spinner("Generiere Beitrag und Bild..."):
         post = generate_post()
-        os.makedirs("images", exist_ok=True)
 
+        os.makedirs("images", exist_ok=True)
         image_path = f"images/post_{datetime.now().timestamp()}.png"
 
-image_url = generate_image_file(
-    post["image_prompt"],
-    image_path
-)
+        image_url = generate_image_file(
+            post["image_prompt"],
+            image_path
+        )
 
         conn.execute(
             """
