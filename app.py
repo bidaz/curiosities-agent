@@ -1,7 +1,7 @@
 from datetime import datetime
 import streamlit as st
 
-from import os
+import os
 from ai import generate_post, generate_image_file
 from database import get_db
 
