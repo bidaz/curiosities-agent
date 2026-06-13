@@ -119,22 +119,7 @@ if os.path.exists(reel_path):
             file_name=f"reel_{post_id}.mp4",
             mime="video/mp4"
         )
-        st.markdown("### Reel")
 
-reel_path = f"reels/reel_{post_id}.mp4"
-
-if st.button(f"Reel erstellen {post_id}"):
-
-    with st.spinner("Erstelle Reel..."):
-
-        create_reel(
-            image_url,
-            title,
-            body,
-            reel_path
-        )
-
-    st.success("Reel erstellt")
 
 if os.path.exists(reel_path):
 
