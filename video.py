@@ -1,6 +1,5 @@
 import asyncio
 import os
-import requests
 
 from moviepy import (
     ImageClip,
@@ -18,12 +17,7 @@ async def create_voice(text, output_audio):
     await communicate.save(output_audio)
 
 
-def download_image(url, output_path):
-    response = requests.get(url)
-    response.raise_for_status()
 
-    with open(output_path, "wb") as file:
-        file.write(response.content)
 
 
 def create_reel(image_url, title, body, output_video):
@@ -31,10 +25,8 @@ def create_reel(image_url, title, body, output_video):
     os.makedirs("temp", exist_ok=True)
     os.makedirs("reels", exist_ok=True)
 
-    image_path = "temp/image.jpg"
+    image_path = image_url
     audio_path = "temp/audio.mp3"
-
-    download_image(image_url, image_path)
 
     script = f"{title}. {body}"
 
