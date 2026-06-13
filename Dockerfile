@@ -1,5 +1,7 @@
 FROM python:3.12.10-slim
 
+COPY build_version.txt /tmp/build_version.txt
+
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
