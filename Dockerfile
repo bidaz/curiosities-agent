@@ -4,10 +4,11 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
-
 RUN python -m pip install --upgrade pip
+
 RUN python -m pip install --no-cache-dir streamlit openai moviepy==2.1.2 edge-tts pillow requests python-dotenv numpy
+
+RUN python -c "import openai; print('OPENAI INSTALLED')"
 
 COPY . .
 
