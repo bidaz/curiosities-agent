@@ -5,3 +5,4 @@ edge-tts
 pillow
 requests
 python-dotenv
+numpy
