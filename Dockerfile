@@ -12,6 +12,8 @@ RUN python -m pip install --no-cache-dir streamlit openai moviepy==2.1.2 edge-tt
 
 RUN python -c "import openai; print('OPENAI INSTALLED')"
 
+RUN date
+
 COPY . .
 
 EXPOSE 8501
