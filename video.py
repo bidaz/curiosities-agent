@@ -17,9 +17,6 @@ async def create_voice(text, output_audio):
     await communicate.save(output_audio)
 
 
-
-
-
 def create_reel(image_url, title, body, output_video):
 
     os.makedirs("temp", exist_ok=True)
