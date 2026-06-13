@@ -22,11 +22,10 @@ def create_reel(image_path, title, body, output_video):
     audio = AudioFileClip(audio_path)
 
     background = (
-        ImageClip(image_path)
-        .resized(height=1920)
-        .crop(x_center=540, y_center=960, width=1080, height=1920)
-        .set_duration(audio.duration)
-    )
+    ImageClip(image_path)
+    .with_duration(audio.duration)
+    .resized((1080, 1920))
+)
 
     headline = (
         TextClip(
