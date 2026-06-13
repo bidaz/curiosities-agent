@@ -37,8 +37,8 @@ def create_reel(image_path, title, body, output_video):
             size=(950, None),
             align="center"
         )
-        .set_position(("center", 180))
-        .set_duration(audio.duration)
+        .with_position(("center", 180))
+        .with_duration(audio.duration)
     )
 
     subtitle = (
@@ -51,8 +51,8 @@ def create_reel(image_path, title, body, output_video):
             size=(950, None),
             align="center"
         )
-        .set_position(("center", 1700))
-        .set_duration(audio.duration)
+        .with_position(("center", 1700))
+        .with_duration(audio.duration)
     )
 
     video = CompositeVideoClip([background, headline, subtitle])
