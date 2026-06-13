@@ -95,7 +95,7 @@ for row in rows:
         st.code(image_prompt)
         st.markdown("### Reel")
 
-reel_path = f"reels/reel_{post_id}.mp4"
+        reel_path = f"reels/reel_{post_id}.mp4"
 
 if st.button(f"Reel erstellen {post_id}"):
     with st.spinner("Erstelle Reel..."):
