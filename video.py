@@ -1,7 +1,6 @@
 import asyncio
 import os
 from moviepy import ImageClip, AudioFileClip, TextClip, CompositeVideoClip
-
 import edge_tts
 
 
