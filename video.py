@@ -1,6 +1,14 @@
 import asyncio
 import os
-from moviepy import ImageClip, AudioFileClip, TextClip, CompositeVideoClip
+import requests
+
+from moviepy import (
+    ImageClip,
+    AudioFileClip,
+    TextClip,
+    CompositeVideoClip
+)
+
 import edge_tts
 
 
@@ -10,10 +18,23 @@ async def create_voice(text, output_audio):
     await communicate.save(output_audio)
 
 
-def create_reel(image_path, title, body, output_video):
+def download_image(url, output_path):
+    response = requests.get(url)
+    response.raise_for_status()
+
+    with open(output_path, "wb") as file:
+        file.write(response.content)
+
+
+def create_reel(image_url, title, body, output_video):
+
+    os.makedirs("temp", exist_ok=True)
     os.makedirs("reels", exist_ok=True)
 
-    audio_path = output_video.replace(".mp4", ".mp3")
+    image_path = "temp/image.jpg"
+    audio_path = "temp/audio.mp3"
+
+    download_image(image_url, image_path)
 
     script = f"{title}. {body}"
 
@@ -22,19 +43,18 @@ def create_reel(image_path, title, body, output_video):
     audio = AudioFileClip(audio_path)
 
     background = (
-    ImageClip(image_path)
-    .with_duration(audio.duration)
-    .resized((1080, 1920))
-)
+        ImageClip(image_path)
+        .with_duration(audio.duration)
+        .resized(width=1080)
+    )
 
     headline = (
         TextClip(
             text=title,
             font_size=70,
             color="white",
-            font="DejaVu-Sans-Bold",
-            method="caption",
             size=(950, None),
+            method="caption",
             text_align="center"
         )
         .with_position(("center", 180))
@@ -43,26 +63,32 @@ def create_reel(image_path, title, body, output_video):
 
     subtitle = (
         TextClip(
-            text="Kurioses aus aller Welt 🌍",
+            text="🌍 Kurioses aus aller Welt",
             font_size=42,
             color="white",
-            font="DejaVu-Sans-Bold",
-            method="caption",
             size=(950, None),
+            method="caption",
             text_align="center"
         )
         .with_position(("center", 1700))
         .with_duration(audio.duration)
     )
 
-    video = CompositeVideoClip([background, headline, subtitle])
-    video = video.set_audio(audio)
+    final_video = CompositeVideoClip(
+        [
+            background,
+            headline,
+            subtitle
+        ],
+        size=(1080, 1920)
+    ).with_audio(audio)
 
-    video.write_videofile(
+    final_video.write_videofile(
         output_video,
-        fps=24,
+        fps=30,
         codec="libx264",
         audio_codec="aac"
     )
 
-    return output_video
+    audio.close()
+    final_video.close()
