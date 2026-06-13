@@ -29,13 +29,13 @@ def create_reel(image_path, title, body, output_video):
 
     headline = (
         TextClip(
-            title,
-            fontsize=70,
+            text=title,
+            font_size=70,
             color="white",
             font="DejaVu-Sans-Bold",
             method="caption",
             size=(950, None),
-            align="center"
+            text_align="center"
         )
         .with_position(("center", 180))
         .with_duration(audio.duration)
@@ -43,13 +43,13 @@ def create_reel(image_path, title, body, output_video):
 
     subtitle = (
         TextClip(
-            "Kurioses aus aller Welt 🌍",
-            fontsize=42,
+            text="Kurioses aus aller Welt 🌍",
+            font_size=42,
             color="white",
             font="DejaVu-Sans-Bold",
             method="caption",
             size=(950, None),
-            align="center"
+            text_align="center"
         )
         .with_position(("center", 1700))
         .with_duration(audio.duration)
