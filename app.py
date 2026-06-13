@@ -97,14 +97,14 @@ for row in rows:
 
         reel_path = f"reels/reel_{post_id}.mp4"
 
-if st.button(f"Reel erstellen {post_id}"):
-    with st.spinner("Erstelle Reel..."):
-        create_reel(
-            image_url,
-            title,
-            body,
-            reel_path
-        )
+        if st.button(f"Reel erstellen {post_id}"):
+            with st.spinner("Erstelle Reel..."):
+                create_reel(
+                    image_url,
+                    title,
+                    body,
+                    reel_path
+                )
 
     st.success("Reel erstellt")
     st.rerun()
