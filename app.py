@@ -93,7 +93,7 @@ for row in rows:
 
         st.markdown("### Bild-Prompt")
         st.code(image_prompt)
-        st.markdown("### Reel")
+                st.markdown("### Reel")
 
         reel_path = f"reels/reel_{post_id}.mp4"
 
@@ -106,19 +106,19 @@ for row in rows:
                     reel_path
                 )
 
-    st.success("Reel erstellt")
-    st.rerun()
+            st.success("Reel erstellt")
+            st.rerun()
 
-if os.path.exists(reel_path):
-    st.video(reel_path)
+        if os.path.exists(reel_path):
+            st.video(reel_path)
 
-    with open(reel_path, "rb") as file:
-        st.download_button(
-            label="Reel herunterladen",
-            data=file,
-            file_name=f"reel_{post_id}.mp4",
-            mime="video/mp4"
-        )
+            with open(reel_path, "rb") as file:
+                st.download_button(
+                    label="Reel herunterladen",
+                    data=file,
+                    file_name=f"reel_{post_id}.mp4",
+                    mime="video/mp4"
+                )
 
 
 if os.path.exists(reel_path):
