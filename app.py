@@ -93,7 +93,7 @@ for row in rows:
 
         st.markdown("### Bild-Prompt")
         st.code(image_prompt)
-                st.markdown("### Reel")
+        st.markdown("### Reel")
 
         reel_path = f"reels/reel_{post_id}.mp4"
 
