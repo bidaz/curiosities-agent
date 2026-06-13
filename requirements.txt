@@ -1,4 +1,4 @@
+streamlit
 moviepy==2.2.1
 edge-tts
-requests
-streamlit
+pillow
