@@ -1,7 +1,7 @@
-streamlit
-openai>=1.30.0
+streamlit==1.45.1
+openai==1.84.0
 moviepy==2.1.2
-edge-tts
+edge-tts==7.0.2
 pillow
 requests
 python-dotenv
