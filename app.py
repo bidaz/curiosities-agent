@@ -121,18 +121,6 @@ for row in rows:
                 )
 
 
-if os.path.exists(reel_path):
-
-    st.video(reel_path)
-
-    with open(reel_path, "rb") as file:
-
-        st.download_button(
-            label="Reel herunterladen",
-            data=file,
-            file_name=f"reel_{post_id}.mp4",
-            mime="video/mp4"
-        )
 
         col1, col2 = st.columns(2)
 
