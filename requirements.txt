@@ -1,5 +1,7 @@
 streamlit
-openai>=1.0.0
+openai>=1.30.0
 moviepy==2.2.1
 edge-tts
 pillow
+requests
+python-dotenv
