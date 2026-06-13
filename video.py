@@ -23,7 +23,7 @@ def create_reel(image_path, title, body, output_video):
 
     background = (
         ImageClip(image_path)
-        .resize(height=1920)
+        .resized(height=1920)
         .crop(x_center=540, y_center=960, width=1080, height=1920)
         .set_duration(audio.duration)
     )
