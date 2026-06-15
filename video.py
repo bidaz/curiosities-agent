@@ -13,7 +13,7 @@ async def create_voice(text, output_audio):
 
 
 def make_text_image(text, output_path, font_size=70, width=950):
-    img = Image.new("RGBA", (1080, 400), (0, 0, 0, 0))
+    img = Image.new("RGB", (1080, 400), (0, 0, 0))
     draw = ImageDraw.Draw(img)
 
     try:
@@ -40,7 +40,7 @@ def make_text_image(text, output_path, font_size=70, width=950):
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=font)
         x = (1080 - (bbox[2] - bbox[0])) / 2
-        draw.text((x, y), line, font=font, fill="white")
+        draw.text((x, y), line, font=font, fill=(255, 255, 255)
         y += font_size + 10
 
     img.save(output_path)
@@ -89,9 +89,14 @@ def create_reel(image_url, title, body, output_video):
 
     final_video.write_videofile(
         output_video,
-        fps=30,
+        fps=24,
         codec="libx264",
-        audio_codec="aac"
+        audio_codec="aac",
+        preset="ultrafast",
+        ffmpeg_params=[
+            "-pix_fmt", "yuv420p",
+            "-movflags", "+faststart"
+        ]
     )
 
     audio.close()
