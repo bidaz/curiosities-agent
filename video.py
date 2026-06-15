@@ -1,8 +1,7 @@
 import asyncio
 import os
+import subprocess
 from PIL import Image, ImageDraw, ImageFont
-
-from moviepy import ImageClip, AudioFileClip, CompositeVideoClip
 import edge_tts
 
 
@@ -12,22 +11,24 @@ async def create_voice(text, output_audio):
     await communicate.save(output_audio)
 
 
-def make_text_image(text, output_path, font_size=70, width=950):
-    img = Image.new("RGB", (1080, 400), (0, 0, 0))
-    draw = ImageDraw.Draw(img)
-
+def get_font(size):
     try:
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", font_size)
+        return ImageFont.truetype(
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+            size
+        )
     except:
-        font = ImageFont.load_default()
+        return ImageFont.load_default()
 
-    lines = []
+
+def draw_centered_text(draw, text, y, font, max_width=950):
     words = text.split()
+    lines = []
     line = ""
 
     for word in words:
-        test = line + " " + word if line else word
-        if draw.textlength(test, font=font) <= width:
+        test = f"{line} {word}".strip()
+        if draw.textlength(test, font=font) <= max_width:
             line = test
         else:
             lines.append(line)
@@ -36,14 +37,11 @@ def make_text_image(text, output_path, font_size=70, width=950):
     if line:
         lines.append(line)
 
-    y = 20
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=font)
         x = (1080 - (bbox[2] - bbox[0])) / 2
-        draw.text((x, y), line, font=font, fill=(255, 255, 255)
-        y += font_size + 10
-
-    img.save(output_path)
+        draw.text((x, y), line, font=font, fill="white")
+        y += font.size + 12
 
 
 def create_reel(image_url, title, body, output_video):
@@ -52,52 +50,42 @@ def create_reel(image_url, title, body, output_video):
 
     image_path = image_url
     audio_path = "temp/audio.mp3"
-    title_img = "temp/title.png"
-    subtitle_img = "temp/subtitle.png"
+    frame_path = "temp/frame.png"
 
     script = f"{title}. {body}"
-
     asyncio.run(create_voice(script, audio_path))
 
-    audio = AudioFileClip(audio_path)
+    img = Image.open(image_path).convert("RGB")
+    img = img.resize((1080, 1920))
 
-    make_text_image(title, title_img, font_size=70)
-    make_text_image("🌍 Kurioses aus aller Welt", subtitle_img, font_size=42)
+    overlay = Image.new("RGB", (1080, 1920), (0, 0, 0))
+    overlay.paste(img, (0, 0))
 
-    background = (
-        ImageClip(image_path)
-        .with_duration(audio.duration)
-        .resized((1080, 1920))
-    )
+    draw = ImageDraw.Draw(overlay)
 
-    headline = (
-        ImageClip(title_img)
-        .with_duration(audio.duration)
-        .with_position(("center", 180))
-    )
+    title_font = get_font(70)
+    subtitle_font = get_font(42)
 
-    subtitle = (
-        ImageClip(subtitle_img)
-        .with_duration(audio.duration)
-        .with_position(("center", 1650))
-    )
+    draw_centered_text(draw, title, 160, title_font)
+    draw_centered_text(draw, "🌍 Kurioses aus aller Welt", 1650, subtitle_font)
 
-    final_video = CompositeVideoClip(
-        [background, headline, subtitle],
-        size=(1080, 1920)
-    ).with_audio(audio)
+    overlay.save(frame_path)
 
-    final_video.write_videofile(
-        output_video,
-        fps=24,
-        codec="libx264",
-        audio_codec="aac",
-        preset="ultrafast",
-        ffmpeg_params=[
-            "-pix_fmt", "yuv420p",
-            "-movflags", "+faststart"
-        ]
-    )
+    command = [
+        "ffmpeg",
+        "-y",
+        "-loop", "1",
+        "-i", frame_path,
+        "-i", audio_path,
+        "-c:v", "libx264",
+        "-tune", "stillimage",
+        "-c:a", "aac",
+        "-b:a", "192k",
+        "-pix_fmt", "yuv420p",
+        "-shortest",
+        output_video
+    ]
 
-    audio.close()
-    final_video.close()
+    subprocess.run(command, check=True)
+
+    return output_video
